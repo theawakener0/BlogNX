@@ -12,14 +12,14 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="BlogNX/index.html">BlogNX</a>
+            <a class="navbar-brand" href="BlogNX/">BlogNX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="BlogNX/index.html">
+                        <a class="nav-link" href="BlogNX/">
                             <i class="bi bi-house-door"></i> Home
                         </a>
                     </li>
