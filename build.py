@@ -5,7 +5,7 @@ from app import app
 
 # Configure Frozen-Flask
 app.config['FREEZER_DESTINATION'] = 'build'
-app.config['FREEZER_BASE_URL'] = 'BlogNX/'
+app.config['FREEZER_BASE_URL'] = '/BlogNX/'
 app.config['FREEZER_RELATIVE_URLS'] = True
 freezer = Freezer(app)
 

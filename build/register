@@ -8,18 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="BlogNX/static/css/style.css">
+    <script type="module" src="BlogNX/static/js/three-background.js"></script>
+    <script src="BlogNX/static/js/main.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="BlogNX/">BlogNX</a>
+            <a class="navbar-brand" href="BlogNX/index.html" data-bs-toggle="tooltip" title="Home">BlogNX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="BlogNX/">
+                        <a class="nav-link" href="BlogNX/index.html">
                             <i class="bi bi-house-door"></i> Home
                         </a>
                     </li>
