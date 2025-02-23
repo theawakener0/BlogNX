@@ -9,10 +9,20 @@ class ParticleBackground {
             alpha: true,
             antialias: true
         });
+        this.renderer.domElement.style.position = 'fixed';
+        this.renderer.domElement.style.top = '0';
+        this.renderer.domElement.style.left = '0';
+        this.renderer.domElement.style.zIndex = '1';
+        this.renderer.domElement.style.pointerEvents = 'none';
         this.particles = [];
         this.mouseX = 0;
         this.mouseY = 0;
+        this.scrollY = 0;
+        this.targetScrollY = 0;
         this.clock = new THREE.Clock();
+        this.colorIndex = 0;
+        this.targetColorIndex = 0;
+        this.colors = [0x800080, 0x9400D3, 0x8A2BE2, 0x9370DB];
 
         this.init();
     }
@@ -32,7 +42,7 @@ class ParticleBackground {
         const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
         this.scene.add(ambientLight);
 
-        const colors = [0x00ffff, 0x4169e1, 0x00bfff, 0x1e90ff, 0x00a8ff, 0x0077ff];
+        const colors = [0x800080, 0x9400D3, 0x8A2BE2, 0x9370DB, 0xBA55D3, 0xDDA0DD];
         for (let i = 0; i < 6; i++) {
             const color = colors[i];
             const pointLight = new THREE.PointLight(color, 2.0, 50);
@@ -52,8 +62,8 @@ class ParticleBackground {
         const colorsArray = new Float32Array(particlesCnt * 3);
         const sizesArray = new Float32Array(particlesCnt);
 
-        const colors = [new THREE.Color(0x00ffff), new THREE.Color(0x4169e1), 
-                       new THREE.Color(0x00bfff), new THREE.Color(0x1e90ff)];
+        const colors = [new THREE.Color(0x800080), new THREE.Color(0x9400D3), 
+                        new THREE.Color(0x8A2BE2), new THREE.Color(0x9370DB)];
 
         for(let i = 0; i < particlesCnt * 3; i += 3) {
             posArray[i] = (Math.random() - 0.5) * 100;
@@ -76,7 +86,9 @@ class ParticleBackground {
             uniforms: {
                 time: { value: 0 },
                 mouseX: { value: 0 },
-                mouseY: { value: 0 }
+                mouseY: { value: 0 },
+                scroll: { value: 0 },
+                colorIndex: { value: 0 }
             },
             vertexShader: `
                 attribute float size;
@@ -85,6 +97,8 @@ class ParticleBackground {
                 uniform float time;
                 uniform float mouseX;
                 uniform float mouseY;
+                uniform float scroll;
+                uniform float colorIndex;
 
                 void main() {
                     vColor = color;
@@ -93,6 +107,7 @@ class ParticleBackground {
                     pos.y += cos(time * 0.3 + position.x * 0.05) * 0.5;
                     pos.x += mouseX * 10.0;
                     pos.y += mouseY * 10.0;
+                    pos.z += scroll * 20.0;
                     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                     gl_PointSize = size * (300.0 / -mvPosition.z);
                     gl_Position = projectionMatrix * mvPosition;
@@ -128,16 +143,27 @@ class ParticleBackground {
             this.mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
             this.mouseY = (event.clientY / window.innerHeight - 0.5) * -2;
         });
+
+        window.addEventListener('scroll', () => {
+            this.targetScrollY = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            this.targetColorIndex = Math.floor(this.targetScrollY * this.colors.length);
+        });
     }
 
     animate() {
         requestAnimationFrame(this.animate.bind(this));
         const elapsedTime = this.clock.getElapsedTime();
 
+        // Smooth scroll and color transitions
+        this.scrollY += (this.targetScrollY - this.scrollY) * 0.1;
+        this.colorIndex += (this.targetColorIndex - this.colorIndex) * 0.05;
+
         this.particles.forEach(particle => {
             particle.material.uniforms.time.value = elapsedTime;
             particle.material.uniforms.mouseX.value = this.mouseX;
             particle.material.uniforms.mouseY.value = this.mouseY;
+            particle.material.uniforms.scroll.value = this.scrollY;
+            particle.material.uniforms.colorIndex.value = this.colorIndex;
             particle.rotation.x += 0.0001;
             particle.rotation.y += 0.0001;
         });
